@@ -1,4 +1,12 @@
+export const LOOPBACK_HOST = "127.0.0.1";
+export const DEFAULT_LOOPBACK_ONLY = true;
+
 const settings: Setting[] = [];
+
+export function isLoopbackOnlyEnabled(): boolean {
+  const value = Settings.get("mcp_loopback_only");
+  return typeof value === "boolean" ? value : DEFAULT_LOOPBACK_ONLY;
+}
 
 export function settingsSetup() {
   const category = "general";
@@ -29,6 +37,14 @@ export function settingsSetup() {
       value: "/bb-mcp",
       category,
       icon: "webhook",
+    }),
+    new Setting("mcp_loopback_only", {
+      name: tl("mcp.settings.loopback_only_name"),
+      description: tl("mcp.settings.loopback_only_desc"),
+      type: "toggle",
+      value: DEFAULT_LOOPBACK_ONLY,
+      category,
+      icon: "shield",
     })
   );
 }

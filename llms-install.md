@@ -11,9 +11,9 @@ Before configuring the MCP connection, please confirm:
    - The MCP plugin must be installed (File > Plugins > Load from URL: `https://jasonjgardner.github.io/blockbench-mcp-plugin/mcp.js`)
 
 2. **What are your server settings?**
-   - Default: `http://localhost:3000/bb-mcp`
+   - Default: `http://127.0.0.1:3000/bb-mcp`
    - If the port number and endpoint are something other than the default values (`:3000/bb-mcp`), please specify
-   - Settings can be changed in Blockbench: Settings > General > MCP Server Port / MCP Server Endpoint
+   - Settings can be changed in Blockbench: Settings > General > MCP Server Port / MCP Server Endpoint / MCP Server Loopback Only
 
 ## Configuration
 
@@ -26,7 +26,7 @@ Add to `cline_mcp_settings.json`:
 {
   "mcpServers": {
     "blockbench": {
-      "url": "http://localhost:{PORT}/{ENDPOINT}",
+      "url": "http://127.0.0.1:{PORT}/{ENDPOINT}",
       "type": "streamableHttp",
       "disabled": false,
       "autoApprove": []
@@ -42,7 +42,7 @@ Create `.vscode/mcp.json`:
 {
   "servers": {
     "blockbench": {
-      "url": "http://localhost:{PORT}/{ENDPOINT}",
+      "url": "http://127.0.0.1:{PORT}/{ENDPOINT}",
       "type": "http"
     }
   }
@@ -57,7 +57,7 @@ Add to `claude_desktop_config.json`:
   "mcpServers": {
     "blockbench": {
       "command": "npx",
-      "args": ["mcp-remote", "http://localhost:{PORT}/{ENDPOINT}"]
+      "args": ["mcp-remote", "http://127.0.0.1:{PORT}/{ENDPOINT}"]
     }
   }
 }
@@ -66,7 +66,7 @@ Add to `claude_desktop_config.json`:
 ### Claude Code
 
 ```bash
-claude mcp add blockbench --transport http http://localhost:{PORT}/{ENDPOINT}
+claude mcp add blockbench --transport http http://127.0.0.1:{PORT}/{ENDPOINT}
 ```
 
 ### Antigravity
@@ -75,7 +75,7 @@ claude mcp add blockbench --transport http http://localhost:{PORT}/{ENDPOINT}
 {
   "mcpServers": {
     "blockbench": {
-      "serverUrl": "http://localhost:{PORT}/{ENDPOINT}"
+      "serverUrl": "http://127.0.0.1:{PORT}/{ENDPOINT}"
     }
   }
 }

@@ -1,7 +1,7 @@
 ## Model Context Protocol Server
-Configure experimental MCP server under Blockbench settings: __Settings__ > __General__ > __MCP Server Port__ and __MCP Server Endpoint__
+Configure experimental MCP server under Blockbench settings: __Settings__ > __General__ > __MCP Server Port__, __MCP Server Endpoint__, and __MCP Server Loopback Only__
 
-The following examples use the default values of `:3000/mcp`
+The following examples use the default safe values of `http://127.0.0.1:3000/bb-mcp`
 
 > __Be sure your Blockbench settings match the port and endpoint used in the MCP JSON configuration.__
 
@@ -18,7 +18,7 @@ __`claude_desktop_config.json`__
       "command": "npx",
       "args": [
         "mcp-remote",
-        "http://localhost:3000/mcp"
+        "http://127.0.0.1:3000/bb-mcp"
       ]
     }
   }
@@ -37,7 +37,7 @@ __`.vscode/mcp.json`__
 {
     "servers": {
         "blockbench": {
-            "url": "http://localhost:3000/mcp"
+            "url": "http://127.0.0.1:3000/bb-mcp"
         },
     }
 }

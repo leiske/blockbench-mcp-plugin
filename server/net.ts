@@ -24,6 +24,10 @@ const DEFAULT_KEEP_ALIVE: KeepAliveConfig = {
   initialDelay: 30000 // 30 seconds
 }
 
+function formatHostForUrl (host: string): string {
+  return host.includes(':') ? `[${host}]` : host
+}
+
 export type SessionTransports = Map<
   string,
   { transport: WebStandardStreamableHTTPServerTransport; server: McpServer }
@@ -50,6 +54,7 @@ export default function createNetServer (
   {
     port,
     endpoint,
+    host,
     keepAlive = DEFAULT_KEEP_ALIVE,
     sessionConfig
   }: {
@@ -486,9 +491,18 @@ export default function createNetServer (
     }
   })
 
-  httpServer.listen(port, () => {
-    console.log(`[MCP] Server listening on http://localhost:${port}${endpoint}`)
-  })
+  const onListen = () => {
+    const target = host
+      ? `http://${formatHostForUrl(host)}:${port}${endpoint}`
+      : `all interfaces on port ${port}${endpoint}`
+    console.log(`[MCP] Server listening on ${target}`)
+  }
+
+  if (host) {
+    httpServer.listen(port, host, onListen)
+  } else {
+    httpServer.listen(port, onListen)
+  }
 
   httpServer.on('error', (err: Error) => {
     console.error('[MCP] Server error:', err)

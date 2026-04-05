@@ -61,6 +61,8 @@ const en: Record<string, string> = {
   "mcp.settings.port_desc": "Port for the MCP server.",
   "mcp.settings.endpoint_name": "MCP Server Endpoint",
   "mcp.settings.endpoint_desc": "Endpoint for the MCP server.",
+  "mcp.settings.loopback_only_name": "MCP Server Loopback Only",
+  "mcp.settings.loopback_only_desc": "Bind the MCP server to 127.0.0.1 only. Disable to allow other machines on your network to connect after reloading the plugin.",
 
   // Tool test dialog
   "mcp.dialog.result_title": "Result: %0",
@@ -141,6 +143,8 @@ const de: Record<string, string> = {
   "mcp.settings.port_desc": "Port für den MCP-Server.",
   "mcp.settings.endpoint_name": "MCP Server Endpunkt",
   "mcp.settings.endpoint_desc": "Endpunkt für den MCP-Server.",
+  "mcp.settings.loopback_only_name": "MCP-Server nur auf Loopback",
+  "mcp.settings.loopback_only_desc": "Bindet den MCP-Server nur an 127.0.0.1. Deaktivieren Sie dies, damit andere Geräte in Ihrem Netzwerk nach dem Neuladen des Plugins eine Verbindung herstellen können.",
 
   // Tool test dialog
   "mcp.dialog.result_title": "Ergebnis: %0",
@@ -221,6 +225,8 @@ const ja: Record<string, string> = {
   "mcp.settings.port_desc": "MCPサーバーのポート。",
   "mcp.settings.endpoint_name": "MCPサーバーエンドポイント",
   "mcp.settings.endpoint_desc": "MCPサーバーのエンドポイント。",
+  "mcp.settings.loopback_only_name": "MCPサーバーをループバックのみに制限",
+  "mcp.settings.loopback_only_desc": "MCPサーバーを127.0.0.1のみにバインドします。無効にすると、プラグインを再読み込みした後でネットワーク上の他の端末から接続できます。",
 
   // Tool test dialog
   "mcp.dialog.result_title": "結果: %0",
@@ -301,6 +307,8 @@ const zh: Record<string, string> = {
   "mcp.settings.port_desc": "MCP服务器的端口。",
   "mcp.settings.endpoint_name": "MCP服务器端点",
   "mcp.settings.endpoint_desc": "MCP服务器的端点。",
+  "mcp.settings.loopback_only_name": "MCP服务器仅限回环",
+  "mcp.settings.loopback_only_desc": "将MCP服务器仅绑定到127.0.0.1。关闭后，重新加载插件即可允许网络中的其他设备连接。",
 
   // Tool test dialog
   "mcp.dialog.result_title": "结果: %0",

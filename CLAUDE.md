@@ -122,7 +122,7 @@ After adding a tool: import the `toolDocs` in `build/docs-manifest.ts`, add to `
 - Blockbench v5.0+ restricts Node modules; the build script injects shims that use `requireNativeModule()` for permission handling
 - Reference Blockbench source (JannisX11/blockbench) for missing types
 - Avoid blocking UI during tool execution
-- Default server: `http://localhost:3000/bb-mcp` (configurable in Settings > General)
+- Default server: `http://127.0.0.1:3000/bb-mcp` (configurable in Settings > General)
 
 ## Testing
 

@@ -20,7 +20,7 @@ For MCP Inspector (optional):
 ```sh
 bunx @modelcontextprotocol/inspector
 ```
-Default server transport (when plugin is loaded): `http://localhost:3000/bb-mcp`.
+Default server transport (when plugin is loaded): `http://127.0.0.1:3000/bb-mcp`.
 
 Local testing in Blockbench: File → Plugins → Load Plugin from File → select `dist/mcp.js`.
 

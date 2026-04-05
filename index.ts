@@ -10,7 +10,12 @@ import { createServer } from "@/server/server";
 import { tools, prompts } from "@/server/tools";
 import { resources } from "@/server";
 import { uiSetup, uiTeardown } from "@/ui";
-import { settingsSetup, settingsTeardown } from "@/ui/settings";
+import {
+  LOOPBACK_HOST,
+  isLoopbackOnlyEnabled,
+  settingsSetup,
+  settingsTeardown,
+} from "@/ui/settings";
 import { setupI18n } from "@/ui/i18n";
 import { sessionManager } from "@/lib/sessions";
 import type { NetServer, SessionTransports } from "@/server/net";
@@ -51,7 +56,8 @@ BBPlugin.register("mcp", {
     // Create TCP server to handle HTTP requests
     [httpServer, sessionTransports] = createNetServer(net, {
       port: Number(Settings.get("mcp_port") || 3000),
-      endpoint: String(Settings.get("mcp_endpoint") || "/bb-mcp")
+      endpoint: String(Settings.get("mcp_endpoint") || "/bb-mcp"),
+      host: isLoopbackOnlyEnabled() ? LOOPBACK_HOST : undefined,
     });
 
     // Create a reference server for UI display purposes

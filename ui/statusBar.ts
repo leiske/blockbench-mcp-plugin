@@ -1,5 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { sessionManager, type Session } from "@/lib/sessions";
+import { LOOPBACK_HOST, isLoopbackOnlyEnabled } from "@/ui/settings";
 import statusBarCSS from "@/ui/statusBar.css";
 
 let statusBarElement: HTMLDivElement | undefined;
@@ -8,6 +9,7 @@ let unsubscribe: (() => void) | undefined;
 export function statusBarSetup(server: McpServer): void {
   const port = Settings.get("mcp_port") || 3000;
   const endpoint = Settings.get("mcp_endpoint") || "/bb-mcp";
+  const host = isLoopbackOnlyEnabled() ? LOOPBACK_HOST : "*";
 
   // Add CSS for the status bar
   Blockbench.addCSS(statusBarCSS);
@@ -30,7 +32,7 @@ export function statusBarSetup(server: McpServer): void {
   
   const serverInfo = document.createElement("span");
   serverInfo.className = "mcp-server-info";
-  serverInfo.textContent = `(${port}${endpoint})`;
+  serverInfo.textContent = `(${host}:${port}${endpoint})`;
 
   statusIndicator.appendChild(statusDot);
   statusIndicator.appendChild(statusText);
