@@ -71,13 +71,7 @@ BBPlugin.register("mcp", {
   },
 
   onunload() {
-    // Close HTTP server
-    if (httpServer) {
-      httpServer.close();
-      httpServer = null;
-    }
-
-    // Close all session transports
+    // Close client transports first so the listener can release the port quickly.
     const values = Array.from(sessionTransports?.values() ?? []);
     for (const session of values) {
       session.transport.close();
@@ -87,8 +81,14 @@ BBPlugin.register("mcp", {
     // Clear all sessions
     sessionManager.clear();
 
+    // Close HTTP server after client transports are shut down.
+    if (httpServer) {
+      httpServer.close();
+      httpServer = null;
+    }
+
     uiTeardown();
-    settingsTeardown();
+    settingsTeardown({ preserveValues: true });
   },
 
   oninstall() {
