@@ -1,13 +1,17 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { sessionManager, type Session } from "@/lib/sessions";
-import { LOOPBACK_HOST, isLoopbackOnlyEnabled } from "@/ui/settings";
+import {
+  DEFAULT_MCP_PORT,
+  LOOPBACK_HOST,
+  isLoopbackOnlyEnabled,
+} from "@/ui/settings";
 import statusBarCSS from "@/ui/statusBar.css";
 
 let statusBarElement: HTMLDivElement | undefined;
 let unsubscribe: (() => void) | undefined;
 
 export function statusBarSetup(server: McpServer): void {
-  const port = Settings.get("mcp_port") || 3000;
+  const port = Settings.get("mcp_port") || DEFAULT_MCP_PORT;
   const endpoint = Settings.get("mcp_endpoint") || "/bb-mcp";
   const host = isLoopbackOnlyEnabled() ? LOOPBACK_HOST : "*";
 

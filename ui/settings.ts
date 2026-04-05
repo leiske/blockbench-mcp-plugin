@@ -1,5 +1,6 @@
 export const LOOPBACK_HOST = "127.0.0.1";
 export const DEFAULT_LOOPBACK_ONLY = true;
+export const DEFAULT_MCP_PORT = 9500;
 
 const MCP_SETTING_IDS = [
   "mcp_instructions",
@@ -9,6 +10,13 @@ const MCP_SETTING_IDS = [
 ] as const;
 
 const settings: Setting[] = [];
+
+function migrateLegacyDefaultPort(): void {
+  if (Settings.get("mcp_port") === 3000) {
+    Settings.stored.mcp_port = DEFAULT_MCP_PORT;
+    Settings.saveLocalStorages();
+  }
+}
 
 export function isLoopbackOnlyEnabled(): boolean {
   const value = Settings.get("mcp_loopback_only");
@@ -24,6 +32,8 @@ function snapshotMcpSettings(): Record<string, string | number | boolean> {
 
 export function settingsSetup() {
   const category = "general";
+
+  migrateLegacyDefaultPort();
 
   settings.push(
     new Setting("mcp_instructions", {
@@ -41,7 +51,7 @@ export function settingsSetup() {
       name: tl("mcp.settings.port_name"),
       description: tl("mcp.settings.port_desc"),
       type: "number",
-      value: 3000,
+      value: DEFAULT_MCP_PORT,
       category,
       requires_restart: true,
       icon: "numbers",

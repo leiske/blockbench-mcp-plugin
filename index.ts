@@ -11,6 +11,7 @@ import { tools, prompts } from "@/server/tools";
 import { resources } from "@/server";
 import { uiSetup, uiTeardown } from "@/ui";
 import {
+  DEFAULT_MCP_PORT,
   LOOPBACK_HOST,
   isLoopbackOnlyEnabled,
   settingsSetup,
@@ -55,7 +56,7 @@ BBPlugin.register("mcp", {
 
     // Create TCP server to handle HTTP requests
     [httpServer, sessionTransports] = createNetServer(net, {
-      port: Number(Settings.get("mcp_port") || 3000),
+      port: Number(Settings.get("mcp_port") || DEFAULT_MCP_PORT),
       endpoint: String(Settings.get("mcp_endpoint") || "/bb-mcp"),
       host: isLoopbackOnlyEnabled() ? LOOPBACK_HOST : undefined,
     });

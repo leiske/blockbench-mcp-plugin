@@ -20,7 +20,7 @@ For MCP Inspector (optional):
 ```sh
 bunx @modelcontextprotocol/inspector
 ```
-Default server transport (when plugin is loaded): `http://127.0.0.1:3000/bb-mcp`.
+Default server transport (when plugin is loaded): `http://127.0.0.1:9500/bb-mcp`.
 
 Local testing in Blockbench: File → Plugins → Load Plugin from File → select `dist/mcp.js`.
 
@@ -116,7 +116,7 @@ See `server/prompts.ts` for examples using the `readPrompt` macro to embed promp
 ## Manual Verification Checklist
 - Build: `bun run build` (or `bun run dev`) and confirm `dist/mcp.js` updates.
 - Load: In Blockbench → File → Plugins → Load Plugin from File → pick `dist/mcp.js`.
-- Settings: Confirm MCP port/endpoint under Settings → General (defaults `3000` and `/bb-mcp`).
+- Settings: Confirm MCP port/endpoint under Settings → General (defaults `9500` and `/bb-mcp`).
 - Server: Open the MCP panel; ensure server shows connected when a client attaches.
 - Tools: Verify new tool appears with a readable title. Using MCP Inspector, call the tool with a small sample payload; confirm no errors and expected side effects (and Undo works when applicable).
 - Resources: In Inspector, resolve a sample URI (e.g., `nodes://<id>` or `textures://<name>`); confirm autocompletion and returned data.

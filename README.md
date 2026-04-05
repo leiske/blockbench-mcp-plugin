@@ -12,7 +12,7 @@ Open the desktop version of Blockbench, go to File > Plugins and click the "Load
 
 Configure the MCP server under Blockbench settings: **Settings** > **General** > **MCP Server Port**, **MCP Server Endpoint**, and **MCP Server Loopback Only**
 
-The following examples use the default safe settings of `http://127.0.0.1:3000/bb-mcp`
+The following examples use the default safe settings of `http://127.0.0.1:9500/bb-mcp`
 
 By default, the plugin binds only to `127.0.0.1`. Disable `MCP Server Loopback Only` only if you intentionally want other machines on your network to connect.
 
@@ -26,7 +26,7 @@ By default, the plugin binds only to `127.0.0.1`. Disable `MCP Server Loopback O
 {
   "servers": {
     "blockbench": {
-      "url": "http://127.0.0.1:3000/bb-mcp",
+      "url": "http://127.0.0.1:9500/bb-mcp",
       "type": "http"
     }
   }
@@ -42,7 +42,7 @@ By default, the plugin binds only to `127.0.0.1`. Disable `MCP Server Loopback O
   "mcpServers": {
     "blockbench": {
       "command": "npx",
-      "args": ["mcp-remote", "http://127.0.0.1:3000/bb-mcp"]
+      "args": ["mcp-remote", "http://127.0.0.1:9500/bb-mcp"]
     }
   }
 }
@@ -51,7 +51,7 @@ By default, the plugin binds only to `127.0.0.1`. Disable `MCP Server Loopback O
 #### Claude Code
 
 ```bash
-claude mcp add blockbench --transport http http://127.0.0.1:3000/bb-mcp
+claude mcp add blockbench --transport http http://127.0.0.1:9500/bb-mcp
 ```
 
 #### [Antigravity](https://antigravity.google/docs/mcp#connecting-custom-mcp-servers)
@@ -60,7 +60,7 @@ claude mcp add blockbench --transport http http://127.0.0.1:3000/bb-mcp
 {
   "mcpServers": {
     "blockbench": {
-      "serverUrl": "http://127.0.0.1:3000/bb-mcp"
+      "serverUrl": "http://127.0.0.1:9500/bb-mcp"
     }
   }
 }
@@ -76,7 +76,7 @@ claude mcp add blockbench --transport http http://127.0.0.1:3000/bb-mcp
 {
   "mcpServers": {
     "blockbench": {
-      "url": "http://127.0.0.1:3000/bb-mcp",
+      "url": "http://127.0.0.1:9500/bb-mcp",
       "type": "streamableHttp",
       "disabled": false,
       "autoApprove": []
@@ -88,7 +88,7 @@ claude mcp add blockbench --transport http http://127.0.0.1:3000/bb-mcp
 #### Ollama
 
 ```bash
-uvx ollmcp -u http://127.0.0.1:3000/bb-mcp
+uvx ollmcp -u http://127.0.0.1:9500/bb-mcp
 ```
 
 Recommended: [jonigl/mcp-client-for-ollama](https://github.com/jonigl/mcp-client-for-ollama)
