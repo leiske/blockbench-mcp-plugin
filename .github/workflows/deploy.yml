@@ -4,9 +4,16 @@ on:
   push:
     branches: [main]
     tags: [v*]
+  release:
+    types: [published]
   pull_request:
     types: [opened, synchronize, reopened, closed]
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing tag to build and attach to a GitHub release
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -28,27 +35,47 @@ jobs:
     outputs:
       deploy_type: ${{ steps.context.outputs.deploy_type }}
       deploy_path: ${{ steps.context.outputs.deploy_path }}
+      release_tag: ${{ steps.context.outputs.release_tag }}
       should_deploy: ${{ steps.permissions.outputs.should_deploy }}
     steps:
+      - name: Determine deployment context
+        id: context
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            TAG="${{ github.event.release.tag_name }}"
+            echo "deploy_type=release" >> $GITHUB_OUTPUT
+            echo "deploy_path=releases/${TAG}" >> $GITHUB_OUTPUT
+            echo "release_tag=${TAG}" >> $GITHUB_OUTPUT
+            echo "checkout_ref=refs/tags/${TAG}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ github.event.inputs.release_tag }}" ]]; then
+            TAG="${{ github.event.inputs.release_tag }}"
+            echo "deploy_type=release" >> $GITHUB_OUTPUT
+            echo "deploy_path=releases/${TAG}" >> $GITHUB_OUTPUT
+            echo "release_tag=${TAG}" >> $GITHUB_OUTPUT
+            echo "checkout_ref=refs/tags/${TAG}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == refs/tags/v* ]]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+            echo "deploy_type=release" >> $GITHUB_OUTPUT
+            echo "deploy_path=releases/${TAG}" >> $GITHUB_OUTPUT
+            echo "release_tag=${TAG}" >> $GITHUB_OUTPUT
+            echo "checkout_ref=${GITHUB_REF}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "deploy_type=pr" >> $GITHUB_OUTPUT
+            echo "deploy_path=pr/${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+            echo "release_tag=" >> $GITHUB_OUTPUT
+            echo "checkout_ref=${GITHUB_SHA}" >> $GITHUB_OUTPUT
+          else
+            echo "deploy_type=nightly" >> $GITHUB_OUTPUT
+            echo "deploy_path=nightly" >> $GITHUB_OUTPUT
+            echo "release_tag=" >> $GITHUB_OUTPUT
+            echo "checkout_ref=${GITHUB_REF}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Determine deployment context
-        id: context
-        run: |
-          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == refs/tags/v* ]]; then
-            TAG="${GITHUB_REF#refs/tags/}"
-            echo "deploy_type=release" >> $GITHUB_OUTPUT
-            echo "deploy_path=releases/${TAG}" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "deploy_type=pr" >> $GITHUB_OUTPUT
-            echo "deploy_path=pr/${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
-          else
-            echo "deploy_type=nightly" >> $GITHUB_OUTPUT
-            echo "deploy_path=nightly" >> $GITHUB_OUTPUT
-          fi
+          ref: ${{ steps.context.outputs.checkout_ref }}
 
       - name: Check deploy permissions
         id: permissions
@@ -110,6 +137,27 @@ jobs:
           name: blockbench-mcp-plugin
           path: staging/
           retention-days: 30
+
+  attach-release-assets:
+    needs: build
+    if: (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && needs.build.outputs.release_tag != '')) && needs.build.outputs.should_deploy == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: blockbench-mcp-plugin
+          path: ./staging
+
+      - name: Attach plugin assets to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.build.outputs.release_tag }}
+          fail_on_unmatched_files: true
+          files: |
+            staging/plugin/mcp.js
+            staging/plugin/about.md
+            staging/plugin/icon.svg
 
   # ---------------------------------------------------------------------------
   # Deploy — pushes to gh-pages branch
